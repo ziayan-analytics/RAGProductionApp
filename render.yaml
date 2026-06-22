@@ -1,0 +1,52 @@
+services:
+  - type: web
+    name: ragproductionapp-backend
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: WAREHOUSE_DATABASE_URL
+        sync: false
+      - key: WAREHOUSE_SOURCE_ID
+        value: disc_medicine_articles
+      - key: WAREHOUSE_PRIMARY_KEY_COLUMNS
+        value: id
+      - key: WAREHOUSE_TEXT_COLUMNS
+        value: title,summary,body
+      - key: WAREHOUSE_METADATA_COLUMNS
+        value: therapeutic_area,program,indication_name,source_url
+      - key: QDRANT_URL
+        sync: false
+      - key: QDRANT_API_KEY
+        sync: false
+      - key: QDRANT_COLLECTION
+        value: docs
+
+  - type: web
+    name: ragproductionapp-ui
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run streamlit_app.py --server.address 0.0.0.0 --server.port $PORT --server.headless true
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: WAREHOUSE_DATABASE_URL
+        sync: false
+      - key: WAREHOUSE_SOURCE_ID
+        value: disc_medicine_articles
+      - key: WAREHOUSE_PRIMARY_KEY_COLUMNS
+        value: id
+      - key: WAREHOUSE_TEXT_COLUMNS
+        value: title,summary,body
+      - key: WAREHOUSE_METADATA_COLUMNS
+        value: therapeutic_area,program,indication_name,source_url
+      - key: QDRANT_URL
+        sync: false
+      - key: QDRANT_API_KEY
+        sync: false
+      - key: QDRANT_COLLECTION
+        value: docs
+      - key: INNGEST_API_BASE
+        sync: false
